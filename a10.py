@@ -43,22 +43,10 @@ def get_population_of_country(country: str) -> str:
     match = get_match(infobox_text, pattern, "No population found")
     return match.group(1).replace(",", "")
 
-def get_motto_of_country(country: str) -> str:
-    infobox_text = clean_text(get_first_infobox_text(get_page_html(country)))
-    pattern = r"Motto\s*(?:\"|“)?([^\"]+)"
-    match = get_match(infobox_text, pattern, "No motto found")
-    return match.group(1).strip()
-
 def get_president_of_country(country: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(country)))
     pattern = r"President.*?([A-Z][a-z]+ [A-Z][a-z]+)"
     match = get_match(infobox_text, pattern, "No president found")
-    return match.group(1).strip()
-
-def get_prime_minister_of_country(country: str) -> str:
-    infobox_text = clean_text(get_first_infobox_text(get_page_html(country)))
-    pattern = r"Prime Minister.*?([A-Z][a-z]+ [A-Z][a-z]+)"
-    match = get_match(infobox_text, pattern, "No prime minister found")
     return match.group(1).strip()
 
 # === Action Wrappers ===
@@ -69,14 +57,8 @@ def capital_city(matches: List[str]) -> List[str]:
 def population(matches: List[str]) -> List[str]:
     return [get_population_of_country(" ".join(matches))]
 
-def motto(matches: List[str]) -> List[str]:
-    return [get_motto_of_country(" ".join(matches))]
-
 def president(matches: List[str]) -> List[str]:
     return [get_president_of_country(" ".join(matches))]
-
-def prime_minister(matches: List[str]) -> List[str]:
-    return [get_prime_minister_of_country(" ".join(matches))]
 
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
@@ -89,9 +71,7 @@ Action = Callable[[List[str]], List[Any]]
 pa_list: List[Tuple[Pattern, Action]] = [
     ("what is the capital of %".split(), capital_city),
     ("what is the population of %".split(), population),
-    ("what is the motto of %".split(), motto),
     ("who is the president of %".split(), president),
-    ("who is the prime minister of %".split(), prime_minister),
     (["bye"], bye_action),
 ]
 
@@ -118,7 +98,5 @@ def query_loop() -> None:
             break
     print("\nSo long!\n")
 
-# Run Chatbot 
+# Run Chatbot
 query_loop()
-
-
